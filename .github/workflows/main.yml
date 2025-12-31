@@ -9,12 +9,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Log in to DockerHub using v2 with correct secrets
-      - name: Log in to DockerHub
+      # 2️⃣ Log in to Docker Hub (correct)
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -32,7 +32,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # 4️⃣ Checkout the repository again
+      # 4️⃣ Checkout repository again
       - name: Checkout code
         uses: actions/checkout@v3
 
