@@ -2,53 +2,40 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1️⃣ Checkout repository
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2️⃣ Log in to Docker Hub using correct secrets
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      # 3️⃣ Build, tag, and push Docker image
-      - name: Build, tag, and push Docker image
+      - name: Build, tag, and push image to DockerHub
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           IMAGE_NAME: my-image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:latest .
+          docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME .
           docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
 
   test:
     runs-on: ubuntu-latest
     steps:
-      # 4️⃣ Checkout repository again
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 5️⃣ Set up Python
+        uses: actions/checkout@v2
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v1
         with:
           python-version: '3.x'
-
-      # 6️⃣ Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      # 7️⃣ Run tests with pytest
       - name: Test with pytest
         run: |
           pip install pytest
